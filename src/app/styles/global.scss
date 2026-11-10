@@ -242,7 +242,9 @@ button:disabled {
 }
 
 .panel__count {
+  flex: none;
   font-size: 0.86rem;
+  white-space: nowrap;
 }
 
 .message {
@@ -370,7 +372,6 @@ button:disabled {
 
 table {
   width: 100%;
-  min-width: 760px;
   border-collapse: collapse;
 }
 
@@ -492,9 +493,17 @@ tr:last-child td {
   }
 }
 
+@media (max-width: 1200px) {
+  th,
+  td {
+    padding: 8px;
+    font-size: 0.86rem;
+  }
+}
+
 @media (min-width: 1024px) {
   .results {
-    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-columns: 260px minmax(0, 1fr);
     align-items: start;
   }
 
