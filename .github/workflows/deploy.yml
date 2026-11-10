@@ -35,9 +35,16 @@ jobs:
         run: npm run lint
 
       - name: Build
-        run: npm run build
         env:
-          VITE_FAVORIT_API_KEY: ${{ vars.VITE_FAVORIT_API_KEY }}
+          FAVORIT_KEY_FROM_ACTIONS: ${{ vars.VITE_FAVORIT_API_KEY || secrets.VITE_FAVORIT_API_KEY }}
+        run: |
+          if [ -n "$FAVORIT_KEY_FROM_ACTIONS" ]; then
+            echo "API key source: GitHub Actions variable or secret"
+            export VITE_FAVORIT_API_KEY="$FAVORIT_KEY_FROM_ACTIONS"
+          else
+            echo "API key source: .env.production public demo key"
+          fi
+          npm run build
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -67,9 +74,16 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
         env:
-          VITE_FAVORIT_API_KEY: ${{ vars.VITE_FAVORIT_API_KEY }}
+          FAVORIT_KEY_FROM_ACTIONS: ${{ vars.VITE_FAVORIT_API_KEY || secrets.VITE_FAVORIT_API_KEY }}
+        run: |
+          if [ -n "$FAVORIT_KEY_FROM_ACTIONS" ]; then
+            echo "API key source: GitHub Actions variable or secret"
+            export VITE_FAVORIT_API_KEY="$FAVORIT_KEY_FROM_ACTIONS"
+          else
+            echo "API key source: .env.production public demo key"
+          fi
+          npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
